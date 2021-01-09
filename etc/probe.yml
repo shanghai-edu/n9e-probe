@@ -1,0 +1,25 @@
+logger:
+  dir: logs/
+  level: INFO
+  keepHours: 24
+
+probe:
+  # 如果需要区分来自不同区域的探针，可以通过在配置 region 来插入 tag
+  #region: default
+  timeout: 5 # 探测的超时时间，单位是秒
+  limit: 10 # 并发限制
+  interval: 30 # 请求的间隔
+  headers: # 插入到 http 请求中的 headers，可以多条
+    user-agent: Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36 Edg/87.0.664.66
+
+ping:
+  107: # n9e 节点上的 nid 号
+    - 114.114.114.114 # 要探测的 ip 地址列表
+    - 114.114.115.115
+
+url:
+  107: # n9e 节点上的 nid 号
+    - https://www.baidu.com # 要探测的 ip 地址列表
+    - https://www.sjtu.edu.cn/
+    - https://bbs.ngacn.cc
+    - https://www.163.com

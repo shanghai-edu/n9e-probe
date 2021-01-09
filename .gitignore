@@ -1,0 +1,4 @@
+*.exe
+etc/probe.local.yml
+etc/address.local.yml
+logs/
