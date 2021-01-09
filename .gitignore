@@ -1,4 +1,5 @@
 *.exe
+n9e-probe
 etc/probe.local.yml
 etc/address.local.yml
 logs/
