@@ -1,0 +1,122 @@
+#!/bin/bash
+
+# release version
+
+CWD=$(cd $(dirname $0)/; pwd)
+cd $CWD
+
+start()
+{
+	mod="probe"
+
+	binfile=n9e-${mod}
+
+	if [ ! -f $binfile ]; then
+		echo "file[$binfile] not found"
+		exit 1
+	fi
+
+	if [ $(ps aux|grep -v grep|grep -v control|grep "$binfile" -c) -gt 0 ]; then
+		echo "${mod} already started"
+		return
+	fi
+
+	mkdir -p logs/
+	nohup $CWD/$binfile &> logs/stdout.log &
+
+	for((i=1;i<=15;i++)); do
+		if [ $(ps aux|grep -v grep|grep -v control|grep "$binfile" -c) -gt 0 ]; then
+			echo "${mod} started"
+			return
+		fi
+		sleep 0.2
+	done
+
+	echo "cannot start ${mod}"
+	exit 1
+}
+
+stop()
+{
+	mod="probe"
+
+	binfile=n9e-${mod}
+
+	if [ $(ps aux|grep -v grep|grep -v control|grep "$binfile" -c) -eq 0 ]; then
+		echo "${mod} already stopped"
+		return
+	fi
+
+	ps aux|grep -v grep|grep -v control|grep "$binfile"|awk '{print $2}'|xargs kill
+	for((i=1;i<=15;i++)); do
+		if [ $(ps aux|grep -v grep|grep -v control|grep "$binfile" -c) -eq 0 ]; then
+			echo "${mod} stopped"
+			return
+		fi
+		sleep 0.2
+	done
+
+	echo "cannot stop $mod"
+	exit 1
+}
+
+restart()
+{
+	mod="probe"
+	stop $mod
+	start $mod
+
+	status
+}
+
+status()
+{
+	ps aux|grep -v grep|grep "probe"
+}
+ 
+build() 
+{
+    go build
+    if [ $? -ne 0 ]; then
+        exit $?
+    fi
+    mod="probe"
+
+    binfile=n9e-${mod}
+    ./$binfile -v
+}
+
+pack() 
+{
+    build
+    git log -1 --pretty=%h > gitversion
+    mod="probe"
+    binfile=n9e-${mod}
+    version=`./$binfile -v | cut -d " " -f2`
+    file_list="control install.sh etc service $binfile"
+    echo "...tar $binfile-$version.tar.gz <= $file_list"
+    tar zcf $binfile-$version.tar.gz gitversion $file_list
+}
+
+case "$1" in
+	start)
+		start $2
+		;;
+	stop)
+		stop $2
+		;;
+	restart)
+		restart $2
+		;;
+	status)
+		status
+		;;
+        build)
+                build
+                ;;
+        pack)
+                pack
+                ;;
+	*)
+		usage
+esac
