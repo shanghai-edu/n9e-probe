@@ -30,8 +30,20 @@ ping 和 http get 请求探测
 |region|如果配置了，则插入 region tag|
 
 ### 配置
-#### probe.yml
+#### address.yml
+```yml
+---
+transfer:
+  http: 0.0.0.0:8008
+  rpc: 0.0.0.0:8009
+  addresses:
+    - 192.168.0.100 # 修改成实际的 n9e 服务器地址
+
+probe:
+  http: 127.0.0.1:2059
 ```
+#### probe.yml
+```yml
 logger:
   dir: logs/
   level: INFO
@@ -53,7 +65,7 @@ ping:
 
 url:
   107: # n9e 节点上的 nid 号
-    - https://www.baidu.com # 要探测的 ip 地址列表
+    - https://www.baidu.com # 要探测的 url 地址列表
     - https://www.sjtu.edu.cn/
     - https://bbs.ngacn.cc
     - https://www.163.com
