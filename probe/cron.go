@@ -3,7 +3,7 @@ package probe
 import (
 	"time"
 
-	"github.com/freedomkk-qfeng/n9e-probe/probe/core"
+	"github.com/shanghai-edu/n9e-probe/probe/core"
 )
 
 func Collect() {

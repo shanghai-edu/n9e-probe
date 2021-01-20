@@ -7,10 +7,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/freedomkk-qfeng/n9e-probe/config"
-	"github.com/freedomkk-qfeng/n9e-probe/http"
-	"github.com/freedomkk-qfeng/n9e-probe/probe"
-	"github.com/freedomkk-qfeng/n9e-probe/probe/core"
+	"github.com/shanghai-edu/n9e-probe/config"
+	"github.com/shanghai-edu/n9e-probe/http"
+	"github.com/shanghai-edu/n9e-probe/probe"
+	"github.com/shanghai-edu/n9e-probe/probe/core"
 
 	"github.com/toolkits/pkg/file"
 	"github.com/toolkits/pkg/logger"

@@ -13,7 +13,7 @@ import (
 	"github.com/toolkits/pkg/logger"
 	"github.com/ugorji/go/codec"
 
-	"github.com/freedomkk-qfeng/n9e-probe/config/address"
+	"github.com/shanghai-edu/n9e-probe/config/address"
 )
 
 func Push(metricItems []*MetricValue) error {

@@ -1,4 +1,4 @@
-module github.com/freedomkk-qfeng/n9e-probe
+module github.com/shanghai-edu/n9e-probe
 
 go 1.15
 

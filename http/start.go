@@ -9,8 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/freedomkk-qfeng/n9e-probe/config/address"
-	"github.com/freedomkk-qfeng/n9e-probe/http/middleware"
+	"github.com/shanghai-edu/n9e-probe/config/address"
+	"github.com/shanghai-edu/n9e-probe/http/middleware"
 )
 
 var srv = &http.Server{

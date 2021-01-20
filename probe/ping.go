@@ -1,9 +1,9 @@
 package probe
 
 import (
-	"github.com/freedomkk-qfeng/n9e-probe/config"
-	"github.com/freedomkk-qfeng/n9e-probe/probe/core"
-	"github.com/freedomkk-qfeng/n9e-probe/probe/models"
+	"github.com/shanghai-edu/n9e-probe/config"
+	"github.com/shanghai-edu/n9e-probe/probe/core"
+	"github.com/shanghai-edu/n9e-probe/probe/models"
 	"github.com/toolkits/pkg/logger"
 )
 
