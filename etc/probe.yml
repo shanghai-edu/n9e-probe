@@ -12,6 +12,9 @@ probe:
   headers: # 插入到 http 请求中的 headers，可以多条
     user-agent: Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36 Edg/87.0.664.66
 
+# server:
+#   rpcMethod: "Transfer.Push"
+
 ping:
   107: # n9e 节点上的 nid 号
     - 114.114.114.114 # 要探测的 ip 地址列表

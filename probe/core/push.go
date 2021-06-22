@@ -13,6 +13,7 @@ import (
 	"github.com/toolkits/pkg/logger"
 	"github.com/ugorji/go/codec"
 
+	"github.com/shanghai-edu/n9e-probe/config"
 	"github.com/shanghai-edu/n9e-probe/config/address"
 )
 
@@ -87,7 +88,7 @@ func rpcCall(addr string, items []*MetricValue) (TransferResp, error) {
 	done := make(chan error, 1)
 
 	go func() {
-		err := client.Call("Transfer.Push", items, &reply)
+		err := client.Call(config.Config.Server.RpcMethod, items, &reply)
 		done <- err
 	}()
 
