@@ -14,6 +14,11 @@ type ConfYaml struct {
 	Probe  probeSection        `yaml:"probe"`
 	Ping   map[string][]string `yaml:"ping"`
 	Url    map[string][]string `yaml:"url"`
+	Server serverSection       `yaml:"server"`
+}
+
+type serverSection struct {
+	RpcMethod string `yaml:"rpcMethod"`
 }
 
 type probeSection struct {
@@ -52,6 +57,8 @@ func Parse(conf string) error {
 	if err != nil {
 		return fmt.Errorf("cannot read yml[%s]: %v", conf, err)
 	}
+
+	viper.SetDefault("server.rpcMethod", "Transfer.Push")
 
 	err = viper.Unmarshal(&Config)
 	if err != nil {
