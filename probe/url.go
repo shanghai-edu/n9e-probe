@@ -29,6 +29,9 @@ func UrlMetrics() []*core.MetricValue {
 			ret = append(ret, core.GenProbeMetric(nid, "url.latency", res.Latency, tags))
 			ret = append(ret, core.GenProbeMetric(nid, "url.cert", res.Cert, tags))
 			ret = append(ret, core.GenProbeMetric(nid, "url.status_code", res.HttpStatusCode, tags))
+			if res.Cert == 1 {
+				ret = append(ret, core.GenProbeMetric(nid, "url.cert_remaining_day", res.CertRemainingDay, tags))
+			}
 		}
 	}
 	return ret

@@ -2,7 +2,9 @@ package models
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"fmt"
+	"math"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -13,10 +15,11 @@ import (
 )
 
 type UrlRes struct {
-	Url            *url.URL
-	Cert           int
-	Latency        float64
-	HttpStatusCode int
+	Url              *url.URL
+	Cert             int
+	CertRemainingDay int
+	Latency          float64
+	HttpStatusCode   int
 }
 
 // UrlProbe 发起一个 url 拨测
@@ -60,11 +63,12 @@ func urlCheck(rawurl string, headers map[string]string, timeout int64) (res UrlR
 
 	var err error
 	var statusCode int
-	statusCode, err = httpGet(rawurl, headers, false, timeout)
+	var certInfo *x509.Certificate
+	statusCode, certInfo, err = httpGet(rawurl, headers, false, timeout)
 	if err != nil && strings.Contains(err.Error(), "certificate") {
 		now = time.Now()
 		res.Cert = -1
-		statusCode, err = httpGet(rawurl, headers, true, timeout)
+		statusCode, _, err = httpGet(rawurl, headers, true, timeout)
 	}
 	end := time.Now()
 	d := end.Sub(now)
@@ -75,6 +79,12 @@ func urlCheck(rawurl string, headers map[string]string, timeout int64) (res UrlR
 	}
 	if urlStruct.Scheme == "https" {
 		res.Cert = 1
+		logger.Debug(certInfo.NotAfter)
+		d := certInfo.NotAfter.Sub(time.Now())
+		logger.Debug(time.Now())
+		logger.Debug(d, d.Hours()/24)
+		res.CertRemainingDay, _ = strconv.Atoi(fmt.Sprintf("%.f", math.Floor(d.Hours()/24)))
+
 	}
 
 	rttStr := fmt.Sprintf("%.3f", float64(d.Nanoseconds())/1000000.0)
@@ -84,7 +94,7 @@ func urlCheck(rawurl string, headers map[string]string, timeout int64) (res UrlR
 	return
 }
 
-func httpGet(rawurl string, headers map[string]string, skipCert bool, timeout int64) (statusCode int, err error) {
+func httpGet(rawurl string, headers map[string]string, skipCert bool, timeout int64) (statusCode int, certInfo *x509.Certificate, err error) {
 	req, err := http.NewRequest("GET", rawurl, nil)
 	if err != nil {
 		return
@@ -107,6 +117,7 @@ func httpGet(rawurl string, headers map[string]string, skipCert bool, timeout in
 		return
 	}
 	defer resp.Body.Close()
+	certInfo = resp.TLS.PeerCertificates[0]
 	statusCode = resp.StatusCode
 	return
 }
