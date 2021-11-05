@@ -118,7 +118,11 @@ func httpGet(rawurl string, headers map[string]string, skipCert bool, timeout in
 		return
 	}
 	defer resp.Body.Close()
-	certInfo = resp.TLS.PeerCertificates[0]
+	if resp.TLS != nil {
+		if len(resp.TLS.PeerCertificates) > 0 {
+			certInfo = resp.TLS.PeerCertificates[0]
+		}
+	}
 	statusCode = resp.StatusCode
 	return
 }
