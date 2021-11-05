@@ -79,12 +79,13 @@ func urlCheck(rawurl string, headers map[string]string, timeout int64) (res UrlR
 	}
 	if urlStruct.Scheme == "https" {
 		res.Cert = 1
-		logger.Debug(certInfo.NotAfter)
-		d := certInfo.NotAfter.Sub(time.Now())
-		logger.Debug(time.Now())
-		logger.Debug(d, d.Hours()/24)
-		res.CertRemainingDay, _ = strconv.Atoi(fmt.Sprintf("%.f", math.Floor(d.Hours()/24)))
-
+		if certInfo != nil {
+			logger.Debug(certInfo.NotAfter)
+			d := certInfo.NotAfter.Sub(time.Now())
+			logger.Debug(time.Now())
+			logger.Debug(d, d.Hours()/24)
+			res.CertRemainingDay, _ = strconv.Atoi(fmt.Sprintf("%.f", math.Floor(d.Hours()/24)))
+		}
 	}
 
 	rttStr := fmt.Sprintf("%.3f", float64(d.Nanoseconds())/1000000.0)
